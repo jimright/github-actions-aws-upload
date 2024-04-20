@@ -16,15 +16,18 @@ jobs:
       id: s3-path
       run: |
         if [[ $GITHUB_REF_NAME == "eob" && $GITHUB_REF_TYPE == "tag" ]]; then
-        echo "S3_LOCATION=vars.s3_bucket" >> $GITHUB_ENV
+        echo "S3_LOCATION=vars.S3_BUCKET" >> $GITHUB_ENV
         fi
 
         if [[ $GITHUB_REF_NAME == "eob-devel" && $GITHUB_REF_TYPE == "branch" ]]; then
-          echo "S3_LOCATION=vars.s3_bucket/dev" >> $GITHUB_ENV
+          echo "S3_LOCATION=vars.S3_BUCKET/dev" >> $GITHUB_ENV
         fi
     
     - name: Print the path
-      run: echo "S3 Path is ${{ env.S3_LOCATION }}"
+      run: |
+        echo "S3 Bucket is ${{ vars.S3_BUCKET }}"
+        echo "S3 Path is ${{ env.S3_LOCATION }}"
+        
 
     # - name: Authenticate with AWS
 
