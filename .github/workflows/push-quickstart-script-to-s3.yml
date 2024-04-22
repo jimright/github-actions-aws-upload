@@ -24,7 +24,7 @@ jobs:
           echo "TRIGGER=eob-devel-branch" >> $GITHUB_ENV
           echo "S3_LOCATION=s3://${{ vars.S3_BUCKET }}/dev" >> $GITHUB_ENV
         fi
-    
+  
     - name: Print the path
       run: |
         echo "Trigger is ${{ env.TRIGGER }}"
@@ -32,6 +32,16 @@ jobs:
         echo "S3 Path is ${{ env.S3_LOCATION }}"
         
 
-    # - name: Authenticate with AWS
+    - name: Authenticate with AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
 
-    # - name: Push quickstart scripts to S3
+    - name: Push quickstart scripts to S3
+      run:
+        for csp in aws azure gcp
+        do
+          echo "aws s3 cp ${csp}/quickstart.sh ${{ env.S3_LOCATION }}/${csp}/"
+        done
