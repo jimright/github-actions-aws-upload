@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ** This is eob tag
+# ** This is devel branch **
 export TF_VAR_aws_region="${1:-""}"
 export TF_VAR_env_prefix="${2:-""}"
 export TF_VAR_deployment_template="${3:-"semi-private"}"
