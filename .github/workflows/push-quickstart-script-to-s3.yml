@@ -17,19 +17,21 @@ jobs:
       run: |
         if [[ $GITHUB_REF_NAME == "eob" && $GITHUB_REF_TYPE == "tag" ]]; then
           echo "TRIGGER=eob-tag" >> $GITHUB_ENV
-          echo "S3_LOCATION=s3://${{ vars.S3_BUCKET }}" >> $GITHUB_ENV
+          # echo "S3_LOCATION=s3://${{ vars.S3_BUCKET }}" >> $GITHUB_ENV
+          echo "S3_FOLDER=latest" >> $GITHUB_ENV
         fi
 
         if [[ $GITHUB_REF_NAME == "eob-devel" && $GITHUB_REF_TYPE == "branch" ]]; then
           echo "TRIGGER=eob-devel-branch" >> $GITHUB_ENV
-          echo "S3_LOCATION=s3://${{ vars.S3_BUCKET }}/dev" >> $GITHUB_ENV
+          # echo "S3_LOCATION=s3://${{ vars.S3_BUCKET }}/dev" >> $GITHUB_ENV
+          echo "S3_FOLDER=dev" >> $GITHUB_ENV
         fi
   
     - name: Print the path
       run: |
         echo "Trigger is ${{ env.TRIGGER }}"
         echo "S3 Bucket is ${{ vars.S3_BUCKET }}"
-        echo "S3 Path is ${{ env.S3_LOCATION }}"
+        echo "S3 Path format is ${{ vars.S3_BUCKET }}/<CLOUD>/${{ env.S3_FOLDER }}"
         
 
     - name: Authenticate with AWS
@@ -43,5 +45,5 @@ jobs:
       run: |
         for csp in aws azure gcp
         do
-          aws s3 cp ${csp}/quickstart.sh ${{ env.S3_LOCATION }}/${csp}/
+          aws s3 cp ${csp}/quickstart.sh ${{ vars.S3_BUCKET }}/${csp}/${{ env.S3_FOLDER }}/
         done
