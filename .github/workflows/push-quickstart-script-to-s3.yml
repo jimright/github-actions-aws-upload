@@ -40,8 +40,8 @@ jobs:
         aws-region: us-east-1
 
     - name: Push quickstart scripts to S3
-      run:
+      run: |
         for csp in aws azure gcp
         do
-          echo "aws s3 cp ${csp}/quickstart.sh ${{ env.S3_LOCATION }}/${csp}/"
+          aws s3 cp ${csp}/quickstart.sh ${{ env.S3_LOCATION }}/${csp}/
         done
